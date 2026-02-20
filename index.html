@@ -4,10 +4,221 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Perpetual Tetteh | Research Portfolio</title>
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and Babel to run JSX in the browser -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons (UMD version for browser) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body { background-color: #fdfcf8; }
+      /* Basic fade-in animation */
+      .animate-in {
+        animation: fadeIn 0.7s ease-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <!-- Vercel will look for your React code here -->
+
+    <!-- 
+      FIX: In a browser environment without a build tool like Vite/Webpack, 
+      loading local .jsx files via 'import' can cause CORS or path resolution issues.
+      We will embed the App logic directly inside this script tag for maximum reliability.
+    -->
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+      // Lucide icons are available globally as 'lucide' when using the UMD script
+      const { 
+        User, BookOpen, Camera, Mail, ExternalLink, 
+        Award, Microscope, ChevronRight, Github, Linkedin, Leaf 
+      } = lucide;
+
+      const App = () => {
+        const [activeTab, setActiveTab] = useState('home');
+
+        const profile = {
+          name: "Perpetual Tetteh",
+          title: "Conservation Biologist & Entomologist",
+          bio: "Passionate researcher focused on sustainable pest management and vector control. My work explores the intersection of botanical chemical ecology and public health, with a specific focus on natural alternatives to synthetic insecticides.",
+          email: "perpetual.tetteh@example.com",
+          university: "University of Cape Coast, Ghana"
+        };
+
+        const research = {
+          title: "Behavioural Response of Aedes aegypti to Odours from Three Plant Materials",
+          abstract: "Investigated the repellent efficacy of Chromolaena odorata, Synedrella nodiflora, and Cymbopogon citratus against Aedes aegypti using Y-tube olfactometry. My findings identified Synedrella nodiflora as a high-potential candidate for botanical repellent development.",
+          skills: ["Olfactometry", "Insect Rearing", "Bioassay Design", "Statistical Analysis (SPSS/R)", "Field Identification"]
+        };
+
+        const photos = [
+          { id: 1, title: "Lab Setup", category: "Research", url: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=800&q=80" },
+          { id: 2, title: "Fieldwork", category: "Conservation", url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80" },
+          { id: 3, title: "Vector Study", category: "Entomology", url: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80" }
+        ];
+
+        const colors = {
+          primary: "text-emerald-800",
+          secondary: "text-amber-800",
+          accent: "bg-emerald-700",
+          accentHover: "hover:bg-emerald-800",
+          lightBg: "bg-[#fdfcf8]",
+          border: "border-amber-100"
+        };
+
+        return (
+          <div className={`min-h-screen ${colors.lightBg} text-slate-800 font-sans`}>
+            <nav className="bg-white/80 backdrop-blur-md border-b border-amber-100 sticky top-0 z-10">
+              <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Leaf className="text-emerald-700" size={20} />
+                  <span className={`font-bold text-xl tracking-tight ${colors.primary}`}>{profile.name}</span>
+                </div>
+                <div className="flex gap-6 text-sm font-semibold">
+                  {['home', 'research', 'photography', 'contact'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`capitalize transition-colors ${activeTab === tab ? 'text-emerald-700 border-b-2 border-emerald-700' : 'text-amber-900/60 hover:text-emerald-700'}`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </nav>
+
+            <main className="max-w-5xl mx-auto px-6 py-12">
+              {activeTab === 'home' && (
+                <div className="space-y-16 animate-in">
+                  <section className="flex flex-col md:flex-row gap-12 items-center">
+                    <div className="w-56 h-56 bg-amber-50 rounded-2xl flex items-center justify-center border-2 border-amber-100 shadow-sm overflow-hidden shrink-0 rotate-3">
+                      <User size={100} className="text-emerald-800 -rotate-3" />
+                    </div>
+                    <div className="space-y-6 text-center md:text-left">
+                      <h1 className={`text-5xl font-black ${colors.primary} tracking-tight leading-tight`}>
+                        Nature’s Chemistry, <br />
+                        <span className="text-amber-800 italic">Redefined.</span>
+                      </h1>
+                      <p className="text-lg text-slate-600 leading-relaxed max-w-2xl font-medium">
+                        {profile.bio}
+                      </p>
+                      <div className="flex gap-4 justify-center md:justify-start pt-2">
+                        <button onClick={() => setActiveTab('research')} className={`${colors.accent} text-white px-8 py-3 rounded-full font-bold ${colors.accentHover} transition shadow-lg flex items-center gap-2`}>
+                          Explore Research <ChevronRight size={18} />
+                        </button>
+                        <button className="border-2 border-amber-200 text-amber-900 px-8 py-3 rounded-full font-bold hover:bg-amber-50 transition">
+                          Curriculum Vitae
+                        </button>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="grid md:grid-cols-3 gap-8">
+                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-amber-50">
+                      <Microscope className="text-emerald-700 mb-6" size={40} />
+                      <h3 className={`font-bold text-xl mb-3 ${colors.primary}`}>Olfactometry</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Specialized in bioassay design to decode how vectors interact with botanical volatiles.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-amber-50">
+                      <BookOpen className="text-amber-800 mb-6" size={40} />
+                      <h3 className={`font-bold text-xl mb-3 ${colors.secondary}`}>Sustainability</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Advocating for biopesticides as a safer alternative to synthetic chemistry.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-amber-50">
+                      <Camera className="text-emerald-700 mb-6" size={40} />
+                      <h3 className={`font-bold text-xl mb-3 ${colors.primary}`}>Conservation</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">Documenting the rich biodiversity of Ghana through scientific preservation.</p>
+                    </div>
+                  </section>
+                </div>
+              )}
+
+              {activeTab === 'research' && (
+                <div className="space-y-10 animate-in">
+                  <div className="bg-white p-10 rounded-[2rem] shadow-sm border border-amber-50">
+                    <div className="flex items-center gap-2 text-amber-800 font-bold text-xs uppercase tracking-[0.2em] mb-6">
+                      <div className="h-px w-8 bg-amber-800"></div> Research Thesis
+                    </div>
+                    <h2 className={`text-3xl font-black mb-6 ${colors.primary} leading-tight`}>{research.title}</h2>
+                    <p className="text-slate-600 mb-8 text-lg leading-relaxed">
+                      {research.abstract}
+                    </p>
+                    <div className="flex flex-wrap gap-3 mb-10">
+                      {research.skills.map(skill => (
+                        <span key={skill} className="bg-amber-50 text-amber-900 border border-amber-100 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="bg-emerald-900 text-emerald-50 p-8 rounded-2xl shadow-inner relative overflow-hidden">
+                       <Leaf className="absolute -right-4 -bottom-4 opacity-10 rotate-45" size={120} />
+                       <p className="text-lg font-medium relative z-0 italic">"My investigation identified that Cymbopogon citratus induces a 100% repellent response in female Aedes aegypti."</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'photography' && (
+                <div className="space-y-12 animate-in">
+                  <div className="text-center max-w-2xl mx-auto">
+                    <h2 className={`text-4xl font-black mb-4 ${colors.primary}`}>The Scientific Lens</h2>
+                    <p className="text-slate-500 text-lg">Visual stories from field expeditions across Ghana.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {photos.map(photo => (
+                      <div key={photo.id} className="group relative rounded-[2rem] overflow-hidden shadow-sm aspect-[4/5] bg-slate-200 border-4 border-white">
+                        <img src={photo.url} alt={photo.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8">
+                          <p className="text-white text-xl font-bold mb-1">{photo.title}</p>
+                          <p className="text-emerald-300 font-medium uppercase tracking-widest text-xs">{photo.category}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'contact' && (
+                <div className="max-w-2xl mx-auto text-center space-y-12 animate-in">
+                  <div className="space-y-4">
+                    <h2 className={`text-4xl font-black ${colors.primary}`}>Let's Collaborate</h2>
+                    <p className="text-slate-500 text-lg">Interested in vector ecology or soil health? Let's start a conversation.</p>
+                  </div>
+                  <div className="bg-white p-12 rounded-[3rem] shadow-xl border border-amber-50 space-y-8">
+                    <a href={`mailto:${profile.email}`} className={`flex items-center justify-center gap-3 text-2xl font-bold ${colors.primary} hover:text-emerald-600 transition underline underline-offset-8 decoration-amber-200`}>
+                      <Mail size={28} /> {profile.email}
+                    </a>
+                    <div className="flex justify-center gap-8 pt-8 border-t border-amber-50">
+                      <Linkedin size={32} className="text-amber-900/40 hover:text-emerald-700 cursor-pointer" />
+                      <Github size={32} className="text-amber-900/40 hover:text-emerald-700 cursor-pointer" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </main>
+
+            <footer className="bg-emerald-950 text-emerald-100/40 py-16 mt-24">
+              <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-center">
+                <div className="flex items-center gap-2">
+                  <Leaf className="text-emerald-500" size={16} />
+                  <p className="font-bold text-emerald-100">Perpetual Tetteh</p>
+                </div>
+                <p className="text-xs uppercase tracking-[0.3em]">Researcher Portfolio 2026</p>
+              </div>
+            </footer>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
   </body>
 </html>
